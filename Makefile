@@ -17,6 +17,8 @@ OCAMLBUILD=ocamlbuild -cflags -w,-a
 
 TARGET=lib/captureio.cma
 
+TEST1=t/01-capture_test.native
+
 
 #============================================
 # Compiling
@@ -25,12 +27,16 @@ TARGET=lib/captureio.cma
 library:
 	$(OCAMLBUILD) $(TARGET)
 
+	
+tests:
+	$(OCAMLBUILD) -no-links -pkg testsimple $(TEST1)
+
 
 #============================================
 # Build
 #============================================
 
-all: library
+all: library tests
 
 
 #============================================
@@ -38,7 +44,7 @@ all: library
 #============================================
 
 test:
-	prove --exec ocaml t/*.ml
+	prove _build/t/*.native
 
 
 #============================================

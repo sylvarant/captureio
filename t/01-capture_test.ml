@@ -1,11 +1,8 @@
-#use "topfind";;
-#directory "_build/lib";;
-#require "TestSimple";;
-#load "unix.cma";;
-#load "captureio.cma";;
 
-open CaptureIO;;
-open TestSimple;;
+open CaptureIO
+open TestSimple
+
+let main() =
 
 plan 7;
 
@@ -23,12 +20,12 @@ is result "5" "captured int";
 let result = capture (fun () -> print_string "hello") in
 is result "hello" "captured string";
 
-let result = capture_stderr (fun () -> (printstr_x_times 2 "hello")) in
+let result = capture_stderr (fun () -> (printstr_x_times 1 "hello")) in
 is result "" "ignored stdout"; 
 
 let sessiontop = start_capture_stdout() in
   print_string("good");
-  prerr_string ("error");
+  prerr_string ("error\n");
 let sessionbottom = start_capture_stderr() in
   prerr_string ("error1");
   prerr_string ("error2");
@@ -43,5 +40,9 @@ let x = ref 5 in
 let session = start_capture_stdout() in
   x:= 5 + !x;
 let result = finish_capture session in 
-is result "" "captured nothing";;
+is result "" "captured nothing";
+exit 0;;
+
+
+main();;
 
