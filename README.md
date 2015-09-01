@@ -1,5 +1,5 @@
 
-# CaptureIO
+CaptureIO
 ==========================================
 [![Build Status](https://travis-ci.org/sylvarant/captureio.svg)](https://travis-ci.org/sylvarant/captureio)
 ---------------------------------------------------------------------------
