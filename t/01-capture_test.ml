@@ -1,12 +1,11 @@
-#!/usr/bin/env ocaml
-
 #use "topfind";;
-#require "TestSimple";;
 #directory "_build/lib";;
+#require "TestSimple";;
+#load "unix.cma";;
 #load "captureio.cma";;
 
-open TestSimple;;
 open CaptureIO;;
+open TestSimple;;
 
 plan 7;
 
