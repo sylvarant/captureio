@@ -31,10 +31,11 @@ let sessiontop = start_capture_stdout() in
   print_string("good");
   prerr_string ("error");
 let sessionbottom = start_capture_stderr() in
+  prerr_string ("error1");
   prerr_string ("error2");
 
 let result = finish_capture sessionbottom in
-is result  "error2" "captured stderr";
+is result  "error1error2" "captured stderr";
 
 let result = finish_capture sessiontop in
 is result "good" "only captured stdout";
