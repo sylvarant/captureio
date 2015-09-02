@@ -1,0 +1,4 @@
+version = "0.1.0"
+description = "Capture output into a string"
+archive(byte) = "captureio.cma"
+archive(native) = "captureio.cmxa"
