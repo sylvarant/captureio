@@ -10,5 +10,5 @@ before_install:
   - opam install testsimple
   - eval `opam config env`
 
-script: make all && make test
+script: make all && make install && make test
 
