@@ -17,7 +17,7 @@ OCAMLBUILD = ocamlbuild -cflags -w,-a
 
 PACKAGE = captureio
 SOURCES = lib/$(PACKAGE).ml lib/$(PACKAGE).mli
-TARGET_NAMES = $(PACKAGE).cmi $(PACKAGE).cma $(PACKAGE).cmxa  $(PACKAGE).a
+TARGET_NAMES = captureIO.cmi $(PACKAGE).cma $(PACKAGE).cmxa  $(PACKAGE).a
 TARGETS=$(addprefix _build/lib/, $(TARGET_NAMES))
 
 TEST1 = t/01-capture_test.native
