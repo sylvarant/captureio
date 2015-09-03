@@ -30,8 +30,20 @@ prerr_string ("error2");
 let str = (finish_capture session) in
 assert(str = "error1error2");
 ```
+It is also possible to capture the output to a specific file descriptor.
+
+```ocaml
+let file_chan = Pervasives.open_out "somefile" in
+let file_descr = Unix.descr_of_out_channel file_chan in
+let session = start_capture_descr [file_descr] in
+  print_string("not captured");
+  Pervasives.output_string file_chan "is captured";
+let result = finish_capture session in
+assert(result = "is captured"); 
+```
 
 For the full API see the file `lib/capturio.mli` which is fully documented.
+For more examples see the tests in `t/01-capture_test.ml`.
 
 ## License
 

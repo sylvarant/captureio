@@ -121,6 +121,11 @@ let capture_stderr arg : string =
   capture_ls [Unix.stderr] arg
 
 
+(* Capture a specific descriptor *)
+let capture_descr descr arg : string =
+  capture_ls descr arg
+
+
 (* Start a session for stdout and stderr *)
 let start_capture() : capture_session =
   start_capture_ls [Unix.stdout;Unix.stderr]
@@ -134,6 +139,11 @@ let start_capture_stdout() : capture_session =
 (* Start a session for stderr *)
 let start_capture_stderr() : capture_session =
   start_capture_ls [Unix.stderr]
+
+
+(* Start a session for a list of descriptors *)
+let start_capture_descr descr : capture_session =
+  start_capture_ls descr
 
 
 (* 

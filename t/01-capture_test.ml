@@ -4,7 +4,7 @@ open TestSimple
 
 let main() =
 
-plan 7;
+plan 9;
 
 (* helper function *)
 let printstr_x_times x str =
@@ -41,6 +41,21 @@ let session = start_capture_stdout() in
   x:= 5 + !x;
 let result = finish_capture session in 
 is result "" "captured nothing";
+
+let filename = "testfile" in
+let file_chan = Pervasives.open_out filename in
+let file_descr = Unix.descr_of_out_channel file_chan in
+let session = start_capture_descr [file_descr] in
+  print_string("not captured");
+  print_newline();
+  Pervasives.output_string file_chan "is captured";
+let result = finish_capture session in
+is result "is captured" "captured output to descriptor";
+
+let print_to_file = (fun () -> Pervasives.output_string file_chan "test") in
+let result = (capture_descr [file_descr] print_to_file) in
+is result "test" "short hand works";
+Unix.unlink filename;
 exit 0;;
 
 

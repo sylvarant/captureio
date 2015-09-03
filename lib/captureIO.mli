@@ -26,6 +26,9 @@ val capture_stdout : (unit -> 'a) -> string
 (* Only capture the stderr channel *)
 val capture_stderr : (unit -> 'a) -> string
 
+(* Capture a list of file descriptors *)
+val capture_descr : Unix.file_descr list -> (unit -> 'a) -> string
+
 (* Start a new capturing session to capture multiple lines of code *)
 val start_capture : unit -> capture_session
 
@@ -34,6 +37,9 @@ val start_capture_stdout : unit -> capture_session
 
 (* Start a new capturing session that only captures stderr *)
 val start_capture_stderr : unit -> capture_session
+
+(* Start a new capturing session that captures a list of descriptors *)
+val start_capture_descr : Unix.file_descr list -> capture_session
 
 (* Finish a capturing session *)
 val finish_capture : capture_session -> string
