@@ -8,7 +8,9 @@ before_install:
   - opam init
   - opam install ocamlfind
   - opam install testsimple
+  - opam install captureio
+  - opam install ocveralls
   - eval `opam config env`
 
-script: make all && make install && make test
+script: make all && make install && make test && make report
 

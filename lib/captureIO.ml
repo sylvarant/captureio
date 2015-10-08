@@ -22,44 +22,31 @@ type capture_session = Unix.file_descr list * Unix.file_descr list * Unix.file_d
 (* Raised whenever forking or reading fails *)
 exception IOCapture of string
 
-(*
-  capture the output to a specific set 
-  of descriptors by executing the argument
-  in a fork where stdin and stdout are redirected
-  -> The advantage is that it does not require a flush_all
+
+(* 
+  Experimental!:
+  works without flush all ! due to knowing
+  that Pervasives.stdout is to be flushed
 *)
-let capture_fork descriptors arg : string =
-  List.iter (fun x -> Pervasives.flush (Unix.out_channel_of_descr x)) descriptors;
-  let (exitp,entrancep) = Unix.pipe() in
-  match Unix.fork () with
-  | 0 ->
-    (* the child *)
-    Unix.close exitp;
-    List.iter (fun x -> (Unix.dup2 entrancep x)) descriptors;
-    let _ = arg() in
-    Unix.close entrancep;
-    exit 0;
-  | -1 ->
-    (* error thrown *) 
-    raise (IOCapture "Fork Failed!")
-  | pid -> 
-    (* the capturing parent *)
-    Unix.close entrancep;
-    match Unix.wait() with
-    | (x,(Unix.WEXITED 0)) when x = pid ->
-      (* read in from the pipe *)
-      (let ls = ref []  
-      and channel = (Unix.in_channel_of_descr exitp) in
-      try
-        while true do
-          let line = Pervasives.input_line channel in
-          ls := line :: !ls
-        done;
-        "never used"
-      with End_of_file -> ((String.concat "\n" !ls))
-        | _ -> raise (IOCapture "Couldn't read channel"))
-    | (x,_) when x <> pid -> raise (IOCapture "Wrong child process died")
-    | _ -> raise (IOCapture "Child process did not terminate normally")
+let capture_stdout_no_flush arg : string =
+  Pervasives.flush Pervasives.stdout;
+  let (exitp,entrancep) = Unix.pipe() 
+  and backup = Unix.dup Unix.stdout in
+  Unix.dup2 entrancep Unix.stdout;
+  let _ = arg() in
+  Pervasives.flush Pervasives.stdout;
+  Unix.close entrancep;
+  Unix.dup2 backup Unix.stdout;
+  let ls = ref []  
+  and channel = (Unix.in_channel_of_descr exitp) in
+  try
+    while true do
+    let line = Pervasives.input_line channel in
+        ls := line :: !ls;
+    done;
+    "never used"
+  with _ -> 
+    ((String.concat "\n" !ls))
 
 
 (* 
@@ -113,7 +100,7 @@ let capture arg : string =
 
 (* Only capture the stderr channel *)
 let capture_stdout arg : string =
-  capture_ls [Unix.stdout] arg 
+  (capture_stdout_no_flush arg)
 
 
 (* Only capture the stdout channel *)
@@ -146,29 +133,3 @@ let start_capture_descr descr : capture_session =
   start_capture_ls descr
 
 
-(* 
-  Experimental!:
-  works without flush all ! due to knowing
-  that Pervasives.stdout is to be flushed
-*)
-let capture_no_flush_all arg : string =
-  Pervasives.flush Pervasives.stdout;
-  let (exitp,entrancep) = Unix.pipe() 
-  and backup = Unix.dup Unix.stdout in
-  Unix.dup2 entrancep Unix.stdout;
-  let _ = arg() in
-  Pervasives.flush Pervasives.stdout;
-  Unix.close entrancep;
-  Unix.dup2 backup Unix.stdout;
-  let ls = ref []  
-  and channel = (Unix.in_channel_of_descr exitp) in
-  try
-    while true do
-    let line = Pervasives.input_line channel in
-        ls := line :: !ls;
-    done;
-    "never used"
-  with _ -> 
-    ((String.concat "\n" !ls))
-
-  

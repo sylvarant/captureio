@@ -17,7 +17,7 @@ ok true "captureio loaded succesfully";
 let result = capture (fun () -> print_int 5) in
 is result "5" "captured int";
 
-let result = capture (fun () -> print_string "hello") in
+let result = capture_stdout (fun () -> print_string "hello") in
 is result "hello" "captured string";
 
 let result = capture_stderr (fun () -> (printstr_x_times 1 "hello")) in

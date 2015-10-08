@@ -10,15 +10,16 @@
 
 OCAMLBUILD = ocamlbuild -cflags -w,-a
 
-
 #============================================
-# Targetss
+# Targets
 #============================================
 
 PACKAGE = captureio
 SOURCES = lib/$(PACKAGE).ml lib/$(PACKAGE).mli
 TARGET_NAMES = captureIO.cmi $(PACKAGE).cma $(PACKAGE).cmxa  $(PACKAGE).a
 TARGETS=$(addprefix _build/lib/, $(TARGET_NAMES))
+COVERAGE = -use-ocamlfind -package bisect_ppx 
+REPORT = BISECT_FILE=_build/coverage
 
 TEST1 = t/01-capture_test.native
 
@@ -28,11 +29,11 @@ TEST1 = t/01-capture_test.native
 #============================================
 
 library: 
-	$(OCAMLBUILD) $(PACKAGE).cma
-	$(OCAMLBUILD) $(PACKAGE).cmxa
+	$(OCAMLBUILD) $(COVERAGE) $(PACKAGE).cma
+	$(OCAMLBUILD) $(COVERAGE) $(PACKAGE).cmxa
 
 tests:
-	$(OCAMLBUILD) -no-links -pkg testsimple $(TEST1)
+	$(OCAMLBUILD) $(COVERAGE) -no-links -pkg testsimple $(TEST1)
 
 
 #============================================
@@ -40,7 +41,7 @@ tests:
 #============================================
 
 test: tests
-	prove _build/t/*.native
+	$(REPORT) prove _build/t/*.native
 
 
 #============================================
@@ -59,6 +60,10 @@ uninstall:
 #============================================
 
 all: library tests
+
+report:
+	ocveralls --prefix _build _build/coverage*.out --send
+	
 
 clean:
 	$(OCAMLBUILD) -clean
