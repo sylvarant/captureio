@@ -10,6 +10,8 @@ before_install:
   - opam install testsimple
   - opam install captureio
   - opam install ocveralls
+  - opam install bisect
+  - opam install bisect_ppx
   - eval `opam config env`
 
 script: make all && make install && make test && make report
