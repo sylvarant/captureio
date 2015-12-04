@@ -1,7 +1,7 @@
 
 CaptureIO
 ==========================================
-[![Build Status](https://travis-ci.org/sylvarant/captureio.svg)](https://travis-ci.org/sylvarant/captureio) [![Coverage Status](https://coveralls.io/repos/sylvarant/captureio/badge.svg?branch=master&service=github)](https://coveralls.io/github/sylvarant/captureio?branch=master)
+[![Build Status](https://travis-ci.org/sylvarant/captureio.svg)](https://travis-ci.org/sylvarant/captureio) [![Coverage Status](https://coveralls.io/repos/sylvarant/captureio/badge.svg?branch=master&service=github)](https://coveralls.io/github/sylvarant/captureio?branch=master) [![artistic](https://img.shields.io/badge/license-Artistic%202.0-blue.svg?style=flat)](https://opensource.org/licenses/Artistic-2.0)
 ---------------------------------------------------------------------------
 
 What is CaptureIO
